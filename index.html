@@ -174,68 +174,44 @@
   </div>
 
   <script>
+    function updateCountdown() {
+      // 1. تحديد تاريخ النهاية (الخميس 14 مايو 2026 الساعة 9:30 صباحاً)
+      // ملاحظة: الشهور في الجافاسكريبت تبدأ من 0 (يعني شهر مايو هو رقم 4)
+      const countDownDate = new Date(2026, 4, 14, 9, 30, 0).getTime();
 
-    /* ==================================
-       Countdown ثابت:
-       4 أيام - 6 ساعات - 15 دقيقة
-    =================================== */
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
 
-    const now = new Date();
-
-    // إنشاء وقت الهدف
-    const targetDate = new Date();
-
-    // إضافة:
-    // 4 أيام + 6 ساعات + 15 دقيقة
-    targetDate.setDate(now.getDate() + 4);
-    targetDate.setHours(now.getHours() + 6);
-    targetDate.setMinutes(now.getMinutes() + 15);
-
-    // Countdown function
-    function updateCountdown(){
-
-      const currentTime = new Date().getTime();
-      const distance = targetDate.getTime() - currentTime;
-
-      // Time calculations
+      // 2. حساب الأيام والساعات والدقائق والثواني
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) /
-        (1000 * 60 * 60)
-      );
+      // 3. عرض القيم في العناصر
+      // التأكد من وجود العناصر قبل التعديل عليها لتجنب الأخطاء
+      if (document.getElementById("days")) {
+          document.getElementById("days").innerText = days;
+          document.getElementById("hours").innerText = hours;
+          document.getElementById("minutes").innerText = minutes;
+          document.getElementById("seconds").innerText = seconds;
+      }
 
-      const minutes = Math.floor(
-        (distance % (1000 * 60 * 60)) /
-        (1000 * 60)
-      );
-
-      const seconds = Math.floor(
-        (distance % (1000 * 60)) / 1000
-      );
-
-      // Display values
-      document.getElementById("days").innerText = days;
-      document.getElementById("hours").innerText = hours;
-      document.getElementById("minutes").innerText = minutes;
-      document.getElementById("seconds").innerText = seconds;
-
-      // When countdown ends
-      if(distance < 0){
-
+      // 4. لما العداد يخلص
+      if (distance < 0) {
         clearInterval(timer);
-
-        document.querySelector(".countdown").innerHTML =
-          "<h2>THE DAY HAS ARRIVED!</h2>";
+        const countdownElement = document.querySelector(".countdown");
+        if (countdownElement) {
+            countdownElement.innerHTML = "<h2>THE DAY HAS ARRIVED!</h2>";
+        }
       }
     }
 
-    // Run immediately
+    // تشغيل الدالة فوراً عند تحميل الصفحة
     updateCountdown();
 
-    // Update every second
+    // تحديث كل ثانية
     const timer = setInterval(updateCountdown, 1000);
-
   </script>
 
 </body>
