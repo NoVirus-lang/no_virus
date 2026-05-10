@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coming Soon</title>
+
+  <style>
+
+    /* =========================
+       Reset & Base Styling
+    ========================== */
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body{
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      overflow: hidden;
+
+      /* =========================
+         ضع اسم الصورة هنا
+         Example:
+         background.jpg
+      ========================== */
+      background: url("22.jpg") center/cover no-repeat;
+
+      position: relative;
+    }
+
+    /* Dark overlay */
+    body::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(2px);
+    }
+
+    /* Main container */
+    .container{
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      max-width: 900px;
+    }
+
+    /* Main title */
+    h1{
+      font-size: 4rem;
+      letter-spacing: 8px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    /* Subtitle */
+    .subtitle{
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 35px;
+      letter-spacing: 1px;
+    }
+
+    /* Countdown wrapper */
+    .countdown{
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Each time box */
+    .time-box{
+      width: 110px;
+      padding: 20px 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .time-box h2{
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+
+    .time-box p{
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+
+    /* =========================
+       Responsive Design
+    ========================== */
+    @media (max-width: 768px){
+
+      h1{
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+      }
+
+      .subtitle{
+        font-size: 1rem;
+        padding: 0 10px;
+      }
+
+      .countdown{
+        gap: 12px;
+      }
+
+      .time-box{
+        width: 90px;
+        padding: 16px 8px;
+      }
+
+      .time-box h2{
+        font-size: 2rem;
+      }
+
+      .time-box p{
+        font-size: 0.8rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Main Text -->
+    <h1>COMING SOON</h1>
+
+    <!-- Subtitle -->
+    <p class="subtitle"><h1>
+     😉تايهه في الكليه احنا هنوصلك😉
+    </h1></p>
+
+    <!-- Countdown -->
+    <div class="countdown">
+
+      <div class="time-box">
+        <h2 id="days">0</h2>
+        <p>DAYS</p>
+      </div>
+
+      <div class="time-box">
+        <h2 id="hours">0</h2>
+        <p>HOURS</p>
+      </div>
+
+      <div class="time-box">
+        <h2 id="minutes">0</h2>
+        <p>MINUTES</p>
+      </div>
+
+      <div class="time-box">
+        <h2 id="seconds">0</h2>
+        <p>SECONDS</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    /* ==================================
+       Countdown To Next Thursday
+       + Extra Day Added
+    =================================== */
+
+    const now = new Date();
+
+    // Target date
+    const targetDate = new Date();
+
+    // Sunday = 0 | Thursday = 4
+    const currentDay = now.getDay();
+    const targetDay = 4;
+
+    // Calculate remaining days
+    let daysUntilThursday = targetDay - currentDay;
+
+    // If Thursday passed
+    if (daysUntilThursday <= 0) {
+      daysUntilThursday += 7;
+    }
+
+    // Add one extra day
+    daysUntilThursday += 1;
+
+    // Set target date
+    targetDate.setDate(now.getDate() + daysUntilThursday);
+
+    // Set time to midnight
+    targetDate.setHours(0, 0, 0, 0);
+
+    // Countdown function
+    function updateCountdown(){
+
+      const currentTime = new Date().getTime();
+      const distance = targetDate.getTime() - currentTime;
+
+      // Time calculations
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+      );
+
+      const minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) /
+        (1000 * 60)
+      );
+
+      const seconds = Math.floor(
+        (distance % (1000 * 60)) / 1000
+      );
+
+      // Display values
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = hours;
+      document.getElementById("minutes").innerText = minutes;
+      document.getElementById("seconds").innerText = seconds;
+
+      // When countdown ends
+      if(distance < 0){
+        clearInterval(timer);
+
+        document.querySelector(".countdown").innerHTML =
+          "<h2>THE DAY HAS ARRIVED!</h2>";
+      }
+    }
+
+    // Run immediately
+    updateCountdown();
+
+    // Update every second
+    const timer = setInterval(updateCountdown, 1000);
+
+  </script>
+
+</body>
+</html>
